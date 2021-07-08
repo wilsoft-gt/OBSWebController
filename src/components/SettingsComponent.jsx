@@ -11,8 +11,8 @@ export const SettingsComponent = () => {
 			<div>
 				<img src="icon.png" alt="obs icon" style={{width:'150px', height:'auto'}} />
 				<h2>OBS remote controller</h2>
-				<p>Developed by <a href="wilsoft-gt.github.io" target="_blank">wilsoft-gt</a></p>
-				<p>You can check the source code on <a href="http://www.url.com" target="_blank">here</a></p>
+				<p>Developed by <a href="https://github.com/wilsoft-gt" target="_blank">wilsoft-gt</a></p>
+				<p>You can check the source code on <a href="https://github.com/wilsoft-gt/OBSWebController" target="_blank">here</a></p>
 			</div>		
 			<div>
 				<h2>Theme chooser will be here</h2>

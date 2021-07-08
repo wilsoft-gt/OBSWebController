@@ -8,7 +8,7 @@ import { displayAlert } from '../redux/alertDucks'
 import { Connect } from "../redux/connectDucks";
 
 export const LoginView = () => {
-	const [address, setAddress] = useState('192.168.0.4');
+	const [address, setAddress] = useState('');
 	const dispatch = useDispatch();
 	const handleConnection = () => {
 		dispatch(Connect(address))
