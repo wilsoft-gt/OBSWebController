@@ -1,7 +1,8 @@
 {
-  "name": "react",
+  "homepage": "http://wilsoft-gt.github.io/OBSWebController",
+  "name": "obswebcontroller",
   "version": "1.0.0",
-  "description": "React example starter project",
+  "description": "A simple, user friendly and responsive OBS controller",
   "keywords": [
     "react",
     "starter"

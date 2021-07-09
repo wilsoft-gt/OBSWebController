@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/OBSWebController/static/css/main.15738d73.chunk.css",
+    "main.js": "/OBSWebController/static/js/main.8e2b8563.chunk.js",
+    "main.js.map": "/OBSWebController/static/js/main.8e2b8563.chunk.js.map",
+    "runtime-main.js": "/OBSWebController/static/js/runtime-main.1e9bbfdd.js",
+    "runtime-main.js.map": "/OBSWebController/static/js/runtime-main.1e9bbfdd.js.map",
+    "static/js/2.5e0dfa2f.chunk.js": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js",
+    "static/js/2.5e0dfa2f.chunk.js.map": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js.map",
+    "index.html": "/OBSWebController/index.html",
+    "static/css/main.15738d73.chunk.css.map": "/OBSWebController/static/css/main.15738d73.chunk.css.map",
+    "static/js/2.5e0dfa2f.chunk.js.LICENSE.txt": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1e9bbfdd.js",
+    "static/js/2.5e0dfa2f.chunk.js",
+    "static/css/main.15738d73.chunk.css",
+    "static/js/main.8e2b8563.chunk.js"
+  ]
+}
