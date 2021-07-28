@@ -5,23 +5,12 @@ import { Button, ProgressBar, ProgressCircular } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSatelliteDish, faStopCircle } from '@fortawesome/free-solid-svg-icons'
 
-/*
-Data to use:
-fps
-kbitsPerSec
-memoryUsage
-numDroppedFrames
-numTotalFrames
-streamTimecode
-cpuUsage
-*/
-
 export const StreamingComponent = () => {
 	const stats = useSelector(store => store.streamReducer)
 	const dispatch = useDispatch()
 
 	if (stats && stats.data.fps) {
-		
+
 		return(
 			<div className='d-flex flex-column justify-content-center align-items-center flex-grow-1 w-100'>	
 				<p>
@@ -37,10 +26,10 @@ export const StreamingComponent = () => {
 						<p>Memory: {parseFloat(stats.data.memoryUsage).toFixed(2)}</p>
 					</div>
 					<div>
-						<ProgressCircular value={parseFloat(stats.data.cpuUsage).toFixed(1)} />	
+						<ProgressCircular variant='warning' value={parseFloat(stats.data.cpuUsage).toFixed(1)} />	
 						<p>CPU ussage</p>
 					</div>
-		
+
 				</div>
 				<Button variant='destructive' onClick={() => dispatch(startStopStreaming())}>
 					<FontAwesomeIcon icon={faStopCircle} className='margin-r-1' />

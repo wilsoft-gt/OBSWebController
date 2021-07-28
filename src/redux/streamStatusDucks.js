@@ -23,7 +23,6 @@ export default function streamingReducer(state={
 			return {...state, isLoading: false, data: {}, error: null}
 		default:
 			return state
-
 	}
 }
 

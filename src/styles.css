@@ -1,7 +1,7 @@
 body, .App, #root {
 	overflow: hidden;	
-  font-family: sans-serif;
-  text-align: center;
+	font-family: sans-serif;
+	text-align: center;
 	height: 100%;
 }
 
@@ -38,8 +38,6 @@ body, html {
 .align-items-between {
 	align-items: space-evenly;
 }
-
-
 
 .align-items-center {
 	align-items: center;
@@ -118,6 +116,9 @@ body, html {
 @media (max-width: 768px) {
 	.w-50 {
 		width: 75%;
+	}
+	.w-75 {
+		width: 100%;
 	}
 }
 

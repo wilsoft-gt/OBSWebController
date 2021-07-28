@@ -19,7 +19,7 @@ export default function alertReducer(state={
 		default:
 			return state
 	}
-	
+
 }
 
 /* Actions */

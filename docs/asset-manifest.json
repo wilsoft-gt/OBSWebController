@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/OBSWebController/static/css/main.15738d73.chunk.css",
-    "main.js": "/OBSWebController/static/js/main.8e2b8563.chunk.js",
-    "main.js.map": "/OBSWebController/static/js/main.8e2b8563.chunk.js.map",
-    "runtime-main.js": "/OBSWebController/static/js/runtime-main.1e9bbfdd.js",
-    "runtime-main.js.map": "/OBSWebController/static/js/runtime-main.1e9bbfdd.js.map",
-    "static/js/2.5e0dfa2f.chunk.js": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js",
-    "static/js/2.5e0dfa2f.chunk.js.map": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js.map",
-    "index.html": "/OBSWebController/index.html",
-    "static/css/main.15738d73.chunk.css.map": "/OBSWebController/static/css/main.15738d73.chunk.css.map",
-    "static/js/2.5e0dfa2f.chunk.js.LICENSE.txt": "/OBSWebController/static/js/2.5e0dfa2f.chunk.js.LICENSE.txt"
+    "main.css": "/static/css/main.18482f11.chunk.css",
+    "main.js": "/static/js/main.75aac4cc.chunk.js",
+    "main.js.map": "/static/js/main.75aac4cc.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.64da593f.js",
+    "runtime-main.js.map": "/static/js/runtime-main.64da593f.js.map",
+    "static/js/2.28edfe8b.chunk.js": "/static/js/2.28edfe8b.chunk.js",
+    "static/js/2.28edfe8b.chunk.js.map": "/static/js/2.28edfe8b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.18482f11.chunk.css.map": "/static/css/main.18482f11.chunk.css.map",
+    "static/js/2.28edfe8b.chunk.js.LICENSE.txt": "/static/js/2.28edfe8b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.1e9bbfdd.js",
-    "static/js/2.5e0dfa2f.chunk.js",
-    "static/css/main.15738d73.chunk.css",
-    "static/js/main.8e2b8563.chunk.js"
+    "static/js/runtime-main.64da593f.js",
+    "static/js/2.28edfe8b.chunk.js",
+    "static/css/main.18482f11.chunk.css",
+    "static/js/main.75aac4cc.chunk.js"
   ]
 }

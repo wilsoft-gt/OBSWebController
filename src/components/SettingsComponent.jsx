@@ -1,11 +1,15 @@
 import React from 'react'
-import {Button} from 'react-rainbow-components'
-import { useDispatch } from 'react-redux'
+import { Button, CheckboxToggle } from 'react-rainbow-components'
+import { useDispatch, useSelector } from 'react-redux'
 import { Disconnect } from '../redux/connectDucks.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import {setState, setTheme } from '../redux/ThemeDucks'
+
 export const SettingsComponent = () => {
 	const dispatch = useDispatch()
+	const theme = useSelector(store => store.themeReducer)
+	const connected = useSelector(state => state.obsReducer.isConnected)
 	return(
 		<div>
 			<div>
@@ -14,13 +18,19 @@ export const SettingsComponent = () => {
 				<p>Developed by <a href="https://github.com/wilsoft-gt" target="_blank">wilsoft-gt</a></p>
 				<p>You can check the source code on <a href="https://github.com/wilsoft-gt/OBSWebController" target="_blank">here</a></p>
 			</div>		
-			<div>
-				<h2>Theme chooser will be here</h2>
+			<div className='d-flex flex-row align-items-center justify-content-center'>
+				<FontAwesomeIcon icon={faSun} size='2x' />
+				<CheckboxToggle 
+					className='margin-3'
+					value={theme.darkMode}
+					onChange={() => dispatch(setTheme(!theme.darkMode))}
+				/>
+				<FontAwesomeIcon icon={faMoon} size='2x'/>
 			</div>
-			<Button variant='destructive' onClick={() => dispatch(Disconnect())}>
+			{connected && <Button variant='destructive' onClick={() => dispatch(Disconnect())}>
 				<FontAwesomeIcon icon={faTimesCircle} className='margin-r-05' />
 				Disconnect
-			</Button>
+			</Button>}
 		</div>
 	)
 }

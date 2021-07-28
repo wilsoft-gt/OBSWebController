@@ -8,7 +8,7 @@ import { faDotCircle, faCircle, faStopCircle } from '@fortawesome/free-solid-svg
 export const RecordingComponent = () => {
 	const stats = useSelector(store =>  store.recordingReducer)
 	const dispatch = useDispatch()
- 
+
 	if (stats.data && stats.data.isRecording) {
 		return(	
 			<div className='flex-grow-1'>

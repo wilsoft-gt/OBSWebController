@@ -21,7 +21,7 @@ export const ScenesComponents = () => {
 	if (data.scenes === undefined) {
 		return <Spinner size='large' type='arc' variant='brand'/> 
 	} else {
-	return(
+		return(
 			<div className='h-100 overflow-auto'>
 				<VisualPicker 
 					id='visual-picker'	
@@ -33,16 +33,15 @@ export const ScenesComponents = () => {
 						data.scenes.map((scene, index) => {
 							return (
 								<VisualPickerOption key={index} name={scene.name}>
-								<FontAwesomeIcon style={{marginBottom: '0.25em'}} icon={faPhotoVideo} size='3x' />
+									<FontAwesomeIcon style={{marginBottom: '0.25em'}} icon={faPhotoVideo} size='3x' />
 									{scene.name}
 								</VisualPickerOption>
 							)
 						})
 					}
 				</VisualPicker>
-
 			</div>
-	)
-	
+		)
+
 	}
 }

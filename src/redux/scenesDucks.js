@@ -31,9 +31,8 @@ export const FetchScenes = (obs) => async (dispatch) => {
 				type: SCENES_FETCH,
 				payload: data
 			})
-		return true 
-	})
-
+			return true 
+		})
 	} catch (e) {
 		console.log(e)
 		dispatch({

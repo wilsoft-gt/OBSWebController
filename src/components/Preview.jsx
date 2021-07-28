@@ -10,7 +10,7 @@ export const PreviewComponent = () => {
 
 	if (image.isLoading){
 		return <Spinner size='large' variant='brand' type='arc' />
-	
+
 	} else if (image.error) {
 		return <h3>{image.error.description}</h3>
 	} else {

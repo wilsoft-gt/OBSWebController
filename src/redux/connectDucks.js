@@ -49,7 +49,7 @@ export const Connect = (address) => async (dispatch) => {
 			dispatch({
 				type: OBS_CONNECT
 			})		
-			
+
 			dispatch(FetchScenes(obs))
 			dispatch(FetchScenePreview(obs))
 			obs.send('GetRecordingStatus').then( res => {
@@ -115,7 +115,7 @@ export const Disconnect = () => async (dispatch) => {
 export const setCurrentScene = (name) => async(dispatch) => {
 	try {
 		await obs.send('SetCurrentScene', {'scene-name': name})
-				.then(e => console.log(e))
+			.then(e => console.log(e))
 	} catch(e){
 		console.log('Catched on setCurrentScene function'+e)
 	}

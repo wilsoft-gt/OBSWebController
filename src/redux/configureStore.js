@@ -7,6 +7,7 @@ import previewReducer from './scenePreviewDucks'
 import recordingReducer from './RecordingDucks'
 import streamingReducer from './streamStatusDucks'
 import alertReducer from './alertDucks'
+import themeReducer from './ThemeDucks'
 
 const rootReducer = combineReducers({
 	obsReducer: obsReducer,
@@ -14,15 +15,22 @@ const rootReducer = combineReducers({
 	previewReducer: previewReducer,
 	recordingReducer: recordingReducer,
 	streamReducer: streamingReducer,
-	alertReducer: alertReducer
+	alertReducer: alertReducer,
+	themeReducer: themeReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+let middleware = [thunk]
+
+if (process.env.NODE_ENV !== 'production' ) {
+	middleware.push(logger)	
+}
+
 export default function GenerateStore() {
-  const store = createStore(
-    rootReducer,
-    composeEnhancers(applyMiddleware(thunk, logger))
-  );
-  return store;
+	const store = createStore(
+		rootReducer,
+		composeEnhancers(applyMiddleware(...middleware))
+	);
+	return store;
 }

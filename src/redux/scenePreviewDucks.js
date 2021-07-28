@@ -28,21 +28,18 @@ export default function previewReducer(state={
 
 export const FetchScenePreview = (obs) =>  async(dispatch) => {	
 	try {
-	
-			fetchInterval = setInterval(() => {
-				obs.send('TakeSourceScreenshot', {embedPictureFormat: 'jpeg', width: 800}).then(data => {	
-					dispatch({
-						type: PREVIEW_IMAGE_FETCH,
-						payload: data
-					})	
-				}).catch(e => {
-					clearInterval(fetchInterval)
-					fetchInterval = undefined
-					dispatch(Disconnect())
-				})
-			}, 1000)
-		
-
+		fetchInterval = setInterval(() => {
+			obs.send('TakeSourceScreenshot', {embedPictureFormat: 'jpeg', width: 800}).then(data => {	
+				dispatch({
+					type: PREVIEW_IMAGE_FETCH,
+					payload: data
+				})	
+			}).catch(e => {
+				clearInterval(fetchInterval)
+				fetchInterval = undefined
+				dispatch(Disconnect())
+			})
+		}, 1000)
 	}
 	catch(e){
 		console.log('catched on FetchScenePreview function'+e)	
