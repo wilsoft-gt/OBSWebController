@@ -30,7 +30,7 @@ export default function streamingReducer(state={
 export const getStreamingStatus = (obs) => async (dispatch) => {
 	try {
 		setInterval(() => {
-			obs.send('GetStreamingStatus').then( res => {
+			obs.call('GetStreamingStatus').then( res => {
 				dispatch({
 					type: STREAMING_STATS,
 					payload: res

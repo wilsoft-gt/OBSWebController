@@ -32,7 +32,7 @@ export default function recordingReducer(state={
 
 export const getRecordingStats = (obs) => async(dispatch) => {
 	try{
-		await obs.send('GetRecordingStatus').then(res => {
+		await obs.call('GetRecordStatus').then(res => {
 			dispatch({
 				type: RECORDING_STATS_FETCH,
 				payload: res

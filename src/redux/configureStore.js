@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import {thunk} from "redux-thunk";
 import logger from 'redux-logger'
 import obsReducer from "./connectDucks";
 import scenesReducer from "./scenesDucks"

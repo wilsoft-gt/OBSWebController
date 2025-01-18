@@ -2,7 +2,7 @@
 import OBSWebSocket from "obs-websocket-js";
 const obs = new OBSWebSocket();
 
-import { FetchScenes, getSourcesList } from './scenesDucks'
+import { FetchScenes } from './scenesDucks'
 import { FetchScenePreview } from './scenePreviewDucks'
 import { getRecordingStats, RECORDING_STATS_STOP } from './RecordingDucks'
 import { STREAMING_STATS, STREAMING_STOP } from './streamStatusDucks'
@@ -45,27 +45,28 @@ export default function ObsReducer(
 /* Action Creators */
 export const Connect = (address) => async (dispatch) => {
 	try {
-		obs.connect({ address: `${address}:4444` }).then((e) => {
+		obs.connect(address=`ws://${address}:4444`).then(() => {
 			dispatch({
 				type: OBS_CONNECT
 			})		
 
 			dispatch(FetchScenes(obs))
 			dispatch(FetchScenePreview(obs))
-			obs.send('GetRecordingStatus').then( res => {
-				if(res.isRecording) {
+			obs.call('GetRecordStatus').then( res => {
+				if(res.outputActive) {
 					isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
 				}
 			})
-			obs.on('RecordingStarted', () => {
+			obs.on('RecordStateChanged', () => {
+				console.info(`$$$$$$$$$$$$La grabacion inicio}`)
 				if (!isRecording) {
 					isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
+				} else {
+					console.info(`$$$$$$$$$$$$La grabacion finalizó}`)
+					clearInterval(isRecording)
+					isRecording = undefined
+					dispatch({type: RECORDING_STATS_STOP})
 				}
-			})
-			obs.on('RecordingStopped', () => {
-				clearInterval(isRecording)
-				isRecording = undefined
-				dispatch({type: RECORDING_STATS_STOP})
 			})
 			obs.on('StreamStatus', res => {
 				dispatch({
@@ -114,7 +115,7 @@ export const Disconnect = () => async (dispatch) => {
 
 export const setCurrentScene = (name) => async(dispatch) => {
 	try {
-		await obs.send('SetCurrentScene', {'scene-name': name})
+		await obs.call('SetCurrentProgramScene', {'sceneName': name})
 			.then(e => console.log(e))
 	} catch(e){
 		console.log('Catched on setCurrentScene function'+e)
@@ -123,7 +124,7 @@ export const setCurrentScene = (name) => async(dispatch) => {
 
 export const startStopRecording = () => async (dispatch) => {
 	try{
-		await obs.send('StartStopRecording')
+		await obs.call('ToggleRecord')
 	} catch (e) {
 		console.log('catched on startStopRecording function '+e)
 	}
@@ -131,7 +132,7 @@ export const startStopRecording = () => async (dispatch) => {
 
 export const startStopStreaming = () => async (dispatch) => {
 	try {
-		await obs.send('StartStopStreaming')
+		await obs.call('ToggleStream')
 	} catch (e) {
 		console.log('Catched on startStopStreaming function'+e)
 	}

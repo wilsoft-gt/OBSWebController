@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Disconnect } from '../redux/connectDucks.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
-import {setState, setTheme } from '../redux/ThemeDucks'
+import { setTheme } from '../redux/ThemeDucks'
 
 export const SettingsComponent = () => {
 	const dispatch = useDispatch()

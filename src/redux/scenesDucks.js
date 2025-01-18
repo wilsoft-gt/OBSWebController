@@ -26,7 +26,7 @@ export default function (store={
 /* Actions */
 export const FetchScenes = (obs) => async (dispatch) => {
 	try {
-		await obs.send('GetSceneList').then(data => {
+		await obs.call('GetSceneList').then(data => {
 			dispatch({
 				type: SCENES_FETCH,
 				payload: data

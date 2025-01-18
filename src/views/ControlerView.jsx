@@ -25,7 +25,7 @@ export const ControllerView = () => {
 	} 
 
 	useEffect( () => {
-		window.addEventListener('resize', (e) =>{
+		window.addEventListener('resize', () =>{
 			setScreenWidth(window.innerWidth)
 		})
 	}, [])

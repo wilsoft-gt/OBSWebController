@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { VisualPicker, VisualPickerOption, Spinner, Card } from 'react-rainbow-components'
+import { VisualPicker, VisualPickerOption, Spinner } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
 import { setCurrentScene } from '../redux/connectDucks'
@@ -15,7 +15,7 @@ export const ScenesComponents = () => {
 	}
 
 	useEffect(() => {
-		setPickerValue(data.currentScene)	
+		setPickerValue(data.currentProgramSceneName)	
 	}, [data])
 
 	if (data.scenes === undefined) {
@@ -30,11 +30,11 @@ export const ScenesComponents = () => {
 					className='overflow-auto'
 				>
 					{
-						data.scenes.map((scene, index) => {
+						data.scenes.map((scene) => {
 							return (
-								<VisualPickerOption key={index} name={scene.name}>
+								<VisualPickerOption key={scene.sceneId} name={scene.sceneName}>
 									<FontAwesomeIcon style={{marginBottom: '0.25em'}} icon={faPhotoVideo} size='3x' />
-									{scene.name}
+									{scene.sceneName}
 								</VisualPickerOption>
 							)
 						})

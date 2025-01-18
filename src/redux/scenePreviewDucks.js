@@ -28,13 +28,15 @@ export default function previewReducer(state={
 
 export const FetchScenePreview = (obs) =>  async(dispatch) => {	
 	try {
-		fetchInterval = setInterval(() => {
-			obs.send('TakeSourceScreenshot', {embedPictureFormat: 'jpeg', width: 800}).then(data => {	
+		fetchInterval = setInterval(async () => {
+			let activeScene = await obs.call("GetCurrentProgramScene")
+			obs.call('GetSourceScreenshot', {imageFormat: 'jpeg', width: 800, sourceName: activeScene.currentProgramSceneName}).then(data => {	
 				dispatch({
 					type: PREVIEW_IMAGE_FETCH,
 					payload: data
 				})	
 			}).catch(e => {
+				console.error(e)
 				clearInterval(fetchInterval)
 				fetchInterval = undefined
 				dispatch(Disconnect())

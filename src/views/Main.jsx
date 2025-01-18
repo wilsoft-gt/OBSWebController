@@ -1,8 +1,6 @@
-import React from 'react'
 import { LoginView } from './LoginView'
 import { ControllerView } from './ControlerView'
 import { useSelector } from 'react-redux'
-import { Application } from 'react-rainbow-components'
 export const MainView = () => {
 
 

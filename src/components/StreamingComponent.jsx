@@ -1,7 +1,6 @@
-import React from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import { startStopStreaming } from '../redux/connectDucks'
-import { Button, ProgressBar, ProgressCircular } from 'react-rainbow-components'
+import { Button, ProgressCircular } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSatelliteDish, faStopCircle } from '@fortawesome/free-solid-svg-icons'
 
