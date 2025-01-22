@@ -8,15 +8,17 @@ export const RecordingComponent = () => {
 	const stats = useSelector(store =>  store.recordingReducer)
 	const dispatch = useDispatch()
 
-	let datos = {"outputActive":false,"outputBytes":12098748,"outputDuration":0,"outputPaused":false,"outputTimecode":"00:00:00.000"}
-
 	if (stats.data && stats.data.outputActive) {
 		return(	
-			<div className='flex-grow-1'>
-				<p><FontAwesomeIcon icon={faCircle} className='breathingAnimation margin-r-05' style={{color: 'red'}}/> Recording </p>
-				<p>Time: {stats.data.outputTimecode}</p>
-				<p>Filename: { stats.data.recordingFilename.slice(stats.data.recordingFilename.lastIndexOf('/')+1, stats.data.recordingFilename.length) }</p>
-				<p>File Path: { stats.data.recordingFilename.slice(0, stats.data.recordingFilename.lastIndexOf('/')+1) }</p>	
+			<div className='d-flex flex-column flex-grow-1 align-items-center justify-content-center'>
+				<p className='breathingAnimation' style={{fontSize: "1.5em"}}><FontAwesomeIcon icon={faCircle} className='margin-r-05' style={{color: 'red'}}/><strong>Recording</strong></p><br />
+				<ul>
+					<li><strong>Time: </strong>{stats.data.outputTimecode.split(".")[0]}</li>
+					<li><strong>Video info: </strong> {stats.data.outputWidth}x{stats.data.outputHeight}, {stats.data.path.split(".").slice(-1)}</li>
+					<li><strong>Output name: </strong>{stats.data.path.split("/").slice(-1)[0].split(".")[0]}</li>
+					<li><strong>Output path: </strong>{stats.data.path.slice(0, stats.data.path.lastIndexOf("/")+1)}</li>
+					<li><strong>Output size: </strong> {(stats.data.outputBytes*0.000001).toFixed(2)}MB</li>
+				</ul><br /><br />
 				<Button variant='destructive' onClick={() => dispatch(startStopRecording())}> 
 					<FontAwesomeIcon icon={faStopCircle} className='margin-r-1'/>
 					Stop recording

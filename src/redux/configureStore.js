@@ -23,7 +23,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let middleware = [thunk]
 
-if (process.env.NODE_ENV !== 'production' ) {
+if (import.meta.env.NODE_ENV !== 'production' ) {
 	middleware.push(logger)	
 }
 

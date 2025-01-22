@@ -45,29 +45,18 @@ export default function ObsReducer(
 /* Action Creators */
 export const Connect = (address) => async (dispatch) => {
 	try {
-		obs.connect(address=`ws://${address}:4444`).then(() => {
-			dispatch({
-				type: OBS_CONNECT
-			})		
+		let result = await obs.connect(address=`ws://${address||'192.168.0.15'}:4444`)
+		if (result) {
+			dispatch({type: OBS_CONNECT})		
 
 			dispatch(FetchScenes(obs))
 			dispatch(FetchScenePreview(obs))
+			
 			obs.call('GetRecordStatus').then( res => {
-				if(res.outputActive) {
+				if(res.outputActive && !isRecording) {
 					isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
 				}
-			})
-			obs.on('RecordStateChanged', () => {
-				console.info(`$$$$$$$$$$$$La grabacion inicio}`)
-				if (!isRecording) {
-					isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
-				} else {
-					console.info(`$$$$$$$$$$$$La grabacion finalizó}`)
-					clearInterval(isRecording)
-					isRecording = undefined
-					dispatch({type: RECORDING_STATS_STOP})
-				}
-			})
+			})			
 			obs.on('StreamStatus', res => {
 				dispatch({
 					type: STREAMING_STATS,
@@ -75,30 +64,31 @@ export const Connect = (address) => async (dispatch) => {
 				})
 				console.log(res)
 			})
+			
 			obs.on('StreamStopped', () => {
 				dispatch({type: STREAMING_STOP})
 				console.log('stream stop')
 			})
+			
 			obs.on('ConnectionClosed', () => {
 				dispatch(displayAlert({title: 'Disconnected', description: 'The connection has been closed', icon:'warning'}))
 				dispatch({type: OBS_DISCONNECT})
 			})
+			
 			obs.on('error', (e) => {
 				dispatch(displayAlert({title:e.error, description:e.description, icon:'error'}))
 			})
-		}).catch( e => {
-			console.log(e)
-			dispatch(displayAlert({title:e.error, description:e.description, icon:'error'}))
-			return e
-		})
-	} catch (e) {		
-		console.log('Catched on Connect function'+e);
-		dispatch({
-			type: OBS_ERROR,
-			payload: e
-		});
+		}
 	}
-};
+	catch (e) {
+			console.log(e)
+			dispatch(displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'}))
+			dispatch({
+				type: OBS_ERROR,
+				payload: e
+			});
+		}
+}
 
 export const Disconnect = () => async (dispatch) => {
 	try {
@@ -124,7 +114,15 @@ export const setCurrentScene = (name) => async(dispatch) => {
 
 export const startStopRecording = () => async (dispatch) => {
 	try{
-		await obs.call('ToggleRecord')
+		let recordingStatus = await obs.call('ToggleRecord')
+		if (recordingStatus.outputActive) {
+			isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
+			dispatch(displayAlert({title: "Recording", description: "Recording has started", icon: "success"}))
+		} else if (!recordingStatus.outputActive && isRecording) {
+			clearInterval(isRecording)
+			dispatch({type: RECORDING_STATS_STOP})
+			dispatch(displayAlert({title: "Recording", description: "Recording has stoped", icon: "info"}))
+		}
 	} catch (e) {
 		console.log('catched on startStopRecording function '+e)
 	}

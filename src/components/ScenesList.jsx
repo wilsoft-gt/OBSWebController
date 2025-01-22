@@ -7,16 +7,18 @@ import { setCurrentScene } from '../redux/connectDucks'
 
 export const ScenesComponents = () => {
 	const data = useSelector(store => store.scenesReducer.data)
-	const [pickerValue, setPickerValue ] = useState('')
+	const [pickerValue, setPickerValue ] = useState(data.currentProgramSceneName)
 	const dispatch = useDispatch()
 	const handlePickerValue = (value) => {
+		console.info(`El nuevo valor del picker es: ${value}`)
 		setPickerValue(value)
 		dispatch(setCurrentScene(value))
+		console.info(`El valor del estado es: ${pickerValue}`)
 	}
 
 	useEffect(() => {
 		setPickerValue(data.currentProgramSceneName)	
-	}, [data])
+	}, [data.currentProgramSceneName])
 
 	if (data.scenes === undefined) {
 		return <Spinner size='large' type='arc' variant='brand'/> 
@@ -26,7 +28,7 @@ export const ScenesComponents = () => {
 				<VisualPicker 
 					id='visual-picker'	
 					value={pickerValue}
-					onChange={handlePickerValue}
+					onChange={(value) => handlePickerValue(value)}
 					className='overflow-auto'
 				>
 					{

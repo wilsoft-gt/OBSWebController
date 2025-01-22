@@ -32,12 +32,18 @@ export default function recordingReducer(state={
 
 export const getRecordingStats = (obs) => async(dispatch) => {
 	try{
-		await obs.call('GetRecordStatus').then(res => {
-			dispatch({
-				type: RECORDING_STATS_FETCH,
-				payload: res
-			})			
-		})
+		let recordingStatus = await obs.call('GetRecordStatus')
+		let outputs = await obs.call("GetOutputList")
+		let recordingOutput = outputs.outputs.find(output => output.outputActive)
+		delete recordingOutput.outputFlags
+		console.info(`#######Outputs: ${JSON.stringify(recordingOutput)}`)
+		let outputSettings = await obs.call("GetOutputSettings", { outputName: recordingOutput.outputName})
+		console.info(`#######Output settings: ${JSON.stringify(outputSettings)}`)
+		dispatch({
+			type: RECORDING_STATS_FETCH,
+			payload: {...recordingStatus, ...recordingOutput, ...outputSettings.outputSettings}
+		})			
+		
 
 	} catch(e){	
 		dispatch({
