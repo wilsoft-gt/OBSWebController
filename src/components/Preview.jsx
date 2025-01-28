@@ -13,7 +13,7 @@ export const PreviewComponent = () => {
 	} else {
 		return(
 			<div className='d-flex flex-column justify-content-center align-items-center'>
-				<img className='prev-img' src={image.image.imageData} />
+				<img className='prev-img' src={image.imageData} />
 			</div>
 		)
 	}

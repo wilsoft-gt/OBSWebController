@@ -4,17 +4,11 @@ import { obsStore } from '../store/connectStore'
 
 export const MainView = () => {
 	const connection = obsStore(store => store.isConnected)
-	if (!connection.isConnected) {
-		return (
-
-				<LoginView />
-
-		)
+	if (!connection) {
+		console.log("Waitfint for connection")
+		return <LoginView />
 	} else {
-		return (
-
-				<ControllerView />
-
-		)
+		console.log("Connection established!")
+		return <ControllerView />
 	}
 }

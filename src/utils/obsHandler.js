@@ -15,30 +15,6 @@ class ObsHandler {
       this.scenePreviewInterval = undefined
       this.recordingInterval = undefined
       this.streamingInterval = undefined
-
-      //Connection state
-      this.storeConnected = obsStore(store => store.connect)
-      this.storeDisconnected = obsStore(store => store.disconnect)
-
-      //scene states
-      this.setScenes = scenesStore(store => store.setScenes)
-      this.scenesError = scenesStore(store => store.scenesError)
-      
-      //scene preview state
-      this.setScenePreview = scenePreviewStore(store => store.setScenePreview)
-      this.scenePreviewError = scenePreviewStore(store => store.scenePreviewError)
-
-      //alert state
-      this.displayAlert = alertStore(store => store.displayAlert)
-      
-      //recording state
-      this.setRecordingStatus = recordingStore(store => store.setRecordingStatus)
-      this.recordingError = recordingStore(store => store.recordingError)
-      this.recordingStop = recordingStore(store => store.recordingStop)
-
-      //streaming state
-      this.setStreamStatus = streamStore(store => store.setStreamStatus)
-      this.streamError = streamStore(store => store.streamError)
     }
     return ObsHandler.instance
   }
@@ -48,35 +24,37 @@ class ObsHandler {
       let result = await this.obs.connect(wsUrl)
       if (result) {
         this.handleEvents()
-        this.fetchScenes(this.obs)
-        this.fetchScenePreview(this.obs)
+        this.fetchScenes()
+        this.fetchScenePreview()
+        obsStore.getState().connect()
       }
     } catch (e) {
-      this.displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'})
+      console.error(e)
+      alertStore.getState().displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'})
     }
   }
 
   async disconnect() {
     try {
       await this.obs.disconnect()
-      this.storeDisconnected()
+      obsStore.getState().disconnect()
       clearInterval(this.recordingInterval)
       clearInterval(this.streamingInterval)
       clearInterval(this.scenePreviewInterval)
+      this.scenePreviewInterval = undefined
+      this.recordingInterval = undefined
+      this.streamingInterval = undefined
     } catch (e) {
-      this.displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'})
+      console.error(e)
+      alertStore.getState().displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'})
     }
   }
 
   handleEvents() {
-    try {
       this.obs.on("StreamStatus", res => console.log(res))
       this.obs.on("StreamStoped", res => console.log(res))
-      this.obs.on("ConnectionClosed", () => console.log("Disconnected"))
+      this.obs.on("ConnectionClosed", (code, reason) => console.log("Disconnected, ", code, reason))
       this.obs.on("error", e => console.log(`Error: ${e}`))
-    } catch (e) {
-      this.displayAlert({title: e.error, description: JSON.stringify(e), icon: "error"})
-    }
   }
 
   async startStopRecording() {
@@ -84,14 +62,15 @@ class ObsHandler {
       let recordingStatus = await this.obs.call("ToggleRecord")
       if (recordingStatus.outputActive) {
         this.getRecordingStatus()
-        this.displayAlert({title: "Recording", description: "Recording has started", icon: "success"})
+        alertStore.getState().displayAlert({title: "Recording", description: "Recording has started", icon: "success"})
       } else if (!recordingStatus.outputActive && this.recordingInterval) {
         clearInterval(this.recordingInterval)
-        this.recordingStop()
-        this.displayAlert({title: "Recording", description: "Recording has stoped", icon: "info"})
+        recordingStore.getState().recordingStop()
+        alertStore.getState().displayAlert({title: "Recording", description: "Recording has stoped", icon: "info"})
       }
     } catch(e) {
-      this.recordingError(e)
+      console.error(e)
+      recordingStore.getState().recordingError(e)
       console.error("There was an error while stopping the recording: ", JSON.stringify(e))
     }
   }
@@ -102,31 +81,35 @@ class ObsHandler {
       if (recordingStatus.outputActive && !this.recordingInterval) {
         this.recordingInterval = setInterval(async () => {
           let outputs = await this.obs.call("GetOutputList")
-          let recordingOutput = outputs.outputs.fing(output => output.outputActive)
+          let recordingOutput = outputs.outputs.find(output => output.outputActive)
           delete recordingOutput.outputFlags
           let outputSettings = await this.obs.call("GetOutputSettings", {outputName: recordingOutput.outputName})
-          this.setRecordingStatus({data: {...recordingStatus, ...recordingOutput, ...outputSettings}})
+          recordingStore.getState().setRecordingStatus({data: {...recordingStatus, ...recordingOutput, ...outputSettings}})
         }, 1000);
       }
     } catch(e) {
-      this.recordingError(e)
+      console.error(e)
+      recordingStore.getState().recordingError(e)
     }
   }
 
   async fetchScenes() {
     try {
       let scenes = await this.obs.call("GetSceneList")
-      this.setScenes(scenes)
+      scenesStore.getState().setScenes(scenes)
     } catch (e) {
-      this.scenesError(e)
+      console.error(e)
+      scenesStore.getState().scenesError(e)
     }
   }
 
   async setCurrentScene(name){
     try {
       await this.obs.call("SetCurrentProgramScene", {"sceneName": name})
+      await this.fetchScenes()
     } catch(e) {
-      this.scenesError(e)
+      console.error(e)
+      scenesStore.getState().scenesError(e)
     }
   }
 
@@ -136,11 +119,12 @@ class ObsHandler {
         this.scenePreviewInterval = setInterval(async () => {
           let activeScene = await this.obs.call("GetCurrentProgramScene")
           let sceneImage = await this.obs.call("GetSourceScreenshot", {imageFormat: "jpeg", width: 800, sourceName: activeScene.currentProgramSceneName})
-          this.setScenePreview(sceneImage)
+          scenePreviewStore.getState().setScenePreview(sceneImage)
         }, 1000);
       }
     } catch (e) {
-      this.scenePreviewError(e)
+      console.error(e)
+      scenePreviewStore.getState().scenePreviewError(e)
     }
   }
 
@@ -148,7 +132,8 @@ class ObsHandler {
     try {
       await this.obs.call("ToggleStream")
     } catch(e) {
-      this.streamError(e)
+      console.error(e)
+      streamStore.getState().streamError(e)
     }
   }
 
@@ -157,16 +142,17 @@ class ObsHandler {
       if (!this.streamingInterval) {
         this.streamingInterval = setInterval(async () => {
           const streamStatus = await this.obs.call("GetStreamingStatus")
-          this.setStreamStatus(streamStatus)
+          streamStore.getState().setStreamStatus(streamStatus)
         }, 1000);
       }
     } catch (e) {
-      this.streamError(e)
+      console.error(e)
+      streamStore.getState().streamError(e)
     }
   }
 
 }
 
 const ObsInstance = new ObsHandler()
-Object.freeze(ObsInstance)
+//Object.freeze(ObsInstance)
 export default ObsInstance

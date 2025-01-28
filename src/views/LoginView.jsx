@@ -8,7 +8,7 @@ import { SettingsComponent } from '../components/SettingsComponent'
 import { themeStore } from "../store/themeStore";
 
 export const LoginView = () => {
-	const [address, setAddress] = useState('');
+	const [address, setAddress] = useState('ws://192.168.0.15:4444');
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const obs = ObsHandler
 	const theme = themeStore(store => store.theme)
@@ -24,7 +24,7 @@ export const LoginView = () => {
 			>
 				<SettingsComponent />
 			</Modal>
-			<article style={{backgroundColor: theme.theme.rainbow.palette.mainBackground}} className='d-flex flex-column justify-content-center vh-100 align-items-center'>
+			<article style={{backgroundColor: theme.rainbow.palette.mainBackground}} className='d-flex flex-column justify-content-center vh-100 align-items-center'>
 				<Alerts />
 				<Card 
 					className='w-50'

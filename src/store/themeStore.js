@@ -35,5 +35,5 @@ const initialState = {
 
 export const themeStore = create(devtools((set) => ({
   ...initialState,
-  setTheme: (isDarkMode) => set({isDarkMode: isDarkMode, theme: themes[isDarkMode ? "dark" : "light"]}),
+  setTheme: (isDarkMode) => set({isDarkMode: isDarkMode, theme: themes[isDarkMode ? "dark" : "light"]}, false, "SetTheme"),
 })))

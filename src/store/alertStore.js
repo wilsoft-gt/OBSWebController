@@ -13,6 +13,6 @@ const initialState = {
 
 export const alertStore = create(devtools((set) => ({
   ...initialState,
-  displayAlert: (newData) => set({isOpen: true, data: newData}),
-  hideAlert: () => set(({isOpen: false, data: initialState.data}))
+  displayAlert: (newData) => set({isOpen: true, data: newData}, false, "Display Alert"),
+  hideAlert: () => set(({isOpen: false, data: initialState.data}), false, "Hide Alert")
 })))

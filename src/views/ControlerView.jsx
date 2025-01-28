@@ -11,7 +11,6 @@ import { Alerts } from '../components/Notification'
 import { themeStore } from '../store/themeStore'
 
 export const ControllerView = () => {
-	window.onResize = (e) => console.log(e)
 	const theme = themeStore(state => state.theme)
 	const [screenWidth, setScreenWidth ] = useState(window.innerWidth)
 	const [tabSelection, setTabSelection] = useState('stream')
@@ -31,7 +30,7 @@ export const ControllerView = () => {
 	}, [])
 
 	return(	
-		<Application theme={theme.theme}>
+		<Application theme={theme}>
 			<Card
 				icon={
 					screenWidth > 768 ? <Avatar size='small' src='icon.png' /> : null
@@ -94,7 +93,7 @@ export const ControllerView = () => {
 										<span> 
 											<FontAwesomeIcon icon={faDotCircle} /> Record
 										</span>
-									}
+									}theme
 								/>
 							</Tabset>
 							{getTabContent()}

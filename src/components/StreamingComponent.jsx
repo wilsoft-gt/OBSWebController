@@ -2,11 +2,13 @@ import { streamStore } from '../store/streamStore'
 import { Button, ProgressCircular } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSatelliteDish, faStopCircle } from '@fortawesome/free-solid-svg-icons'
+import ObsInstance from '../utils/obsHandler'
 
 export const StreamingComponent = () => {
 	const stats = streamStore(store => store.data)
+	const obs = ObsInstance
 
-	if (stats && stats.data.fps) {
+	if (stats && stats.fps) {
 
 		return(
 			<div className='d-flex flex-column justify-content-center align-items-center flex-grow-1 w-100'>	
@@ -28,7 +30,7 @@ export const StreamingComponent = () => {
 					</div>
 
 				</div>
-				<Button variant='destructive' onClick={() => dispatch(startStopStreaming())}>
+				<Button variant='destructive' onClick={() => obs.startStopStreaming()}>
 					<FontAwesomeIcon icon={faStopCircle} className='margin-r-1' />
 					Stop Streaming
 				</Button>
@@ -37,7 +39,7 @@ export const StreamingComponent = () => {
 	} else {
 		return (
 			<div className='d-flex flex-column flex-grow-1 align-items-center justify-content-center'>
-				<Button variant='brand' onClick={ () => dispatch(startStopStreaming()) }>
+				<Button variant='brand' onClick={ () => obs.startStopStreaming() }>
 					<FontAwesomeIcon className='margin-r-1' icon={faSatelliteDish} />
 					Start Sreaming
 				</Button>
