@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react'
-import { useSelector } from 'react-redux'
+import {useState, useEffect} from 'react'
 import { ScenesComponents } from '../components/ScenesList'
 import { PreviewComponent } from '../components/Preview'
 import { RecordingComponent } from '../components/RecordingComponent'
@@ -9,10 +8,11 @@ import {Application, Tabset, Tab, Card, ButtonIcon, Avatar, Button, Modal } from
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSatelliteDish, faDotCircle, faPhotoVideo, faCog } from '@fortawesome/free-solid-svg-icons'
 import { Alerts } from '../components/Notification'
+import { themeStore } from '../store/themeStore'
 
 export const ControllerView = () => {
 	window.onResize = (e) => console.log(e)
-	const theme = useSelector(state => state.themeReducer)
+	const theme = themeStore(state => state.theme)
 	const [screenWidth, setScreenWidth ] = useState(window.innerWidth)
 	const [tabSelection, setTabSelection] = useState('stream')
 	const [isSettingsOpen, setSettingsOpen] = useState(false)

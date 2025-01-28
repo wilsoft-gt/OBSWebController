@@ -1,10 +1,9 @@
 import { LoginView } from './LoginView'
 import { ControllerView } from './ControlerView'
-import { useSelector } from 'react-redux'
+import { obsStore } from '../store/connectStore'
+
 export const MainView = () => {
-
-
-	const connection = useSelector(store => store.obsReducer)
+	const connection = obsStore(store => store.isConnected)
 	if (!connection.isConnected) {
 		return (
 

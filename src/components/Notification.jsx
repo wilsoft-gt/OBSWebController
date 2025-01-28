@@ -1,21 +1,21 @@
 import { Notification } from 'react-rainbow-components'
-import {useSelector, useDispatch} from 'react-redux'
-import { hideAlert } from '../redux/alertDucks'
+import { alertStore } from '../store/alertStore'
 
 export const Alerts = () => {
-	const alerts = useSelector(store => store.alertReducer)
-	const dispatch = useDispatch()
-	if (alerts && alerts.isOpen) {
+	const isOpen = alertStore(store => store.isOpen)
+	const data = alertStore(store => store.data)
+	const hideAlert = alertStore(store => store.hideAlert)
+	if (data && isOpen) {
 		setTimeout(() => {
-			dispatch(hideAlert())
+			hideAlert()
 		}, 15000);
 		return (
 			<Notification
 				className='alert'
-				title={alerts.data.title}
-				description={alerts.data.description}
-				icon={alerts.data.icon}
-				onRequestClose={() => dispatch(hideAlert())}
+				title={data.title}
+				description={data.description}
+				icon={data.icon}
+				onRequestClose={() => hideAlert()}
 			/>
 		)
 	} else {

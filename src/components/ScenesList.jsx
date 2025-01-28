@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { scenesStore } from '../store/scenesStore'
 import { VisualPicker, VisualPickerOption, Spinner } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
-import { setCurrentScene } from '../redux/connectDucks'
+import ObsInstance from '../utils/obsHandler'
 
 export const ScenesComponents = () => {
-	const data = useSelector(store => store.scenesReducer.data)
+	const obs = ObsInstance
+	const data = scenesStore(store => store.data)
 	const [pickerValue, setPickerValue ] = useState(data.currentProgramSceneName)
-	const dispatch = useDispatch()
 	const handlePickerValue = (value) => {
 		console.info(`El nuevo valor del picker es: ${value}`)
 		setPickerValue(value)
-		dispatch(setCurrentScene(value))
+		obs.setCurrentScene(value)
 		console.info(`El valor del estado es: ${pickerValue}`)
 	}
 

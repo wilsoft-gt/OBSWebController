@@ -1,11 +1,11 @@
 import { Spinner } from 'react-rainbow-components'
-import { useSelector } from 'react-redux'
+import { scenePreviewStore } from '../store/scenePreviewStore'
 
 
 export const PreviewComponent = () => {
-
-	const image = useSelector(store => store.previewReducer)
-	if (image.isLoading){
+	const isLoading = scenePreviewStore(store => store.isLoading)
+	const image = scenePreviewStore(store=>store.image)
+	if (isLoading){
 		return <Spinner size='large' variant='brand' type='arc' />
 
 	} else if (image.error) {

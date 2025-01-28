@@ -1,12 +1,10 @@
-import {useSelector, useDispatch} from 'react-redux'
-import { startStopStreaming } from '../redux/connectDucks'
+import { streamStore } from '../store/streamStore'
 import { Button, ProgressCircular } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSatelliteDish, faStopCircle } from '@fortawesome/free-solid-svg-icons'
 
 export const StreamingComponent = () => {
-	const stats = useSelector(store => store.streamReducer)
-	const dispatch = useDispatch()
+	const stats = streamStore(store => store.data)
 
 	if (stats && stats.data.fps) {
 

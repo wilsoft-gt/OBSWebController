@@ -1,15 +1,14 @@
-import React from 'react'
 import { Button, CheckboxToggle } from 'react-rainbow-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { Disconnect } from '../redux/connectDucks.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
-import { setTheme } from '../redux/ThemeDucks'
+import { themeStore } from '../store/themeStore.js'
+import { obsStore } from '../store/connectStore.js'
 
 export const SettingsComponent = () => {
-	const dispatch = useDispatch()
-	const theme = useSelector(store => store.themeReducer)
-	const connected = useSelector(state => state.obsReducer.isConnected)
+
+	const theme = themeStore(store => store.theme)
+	const connected = obsStore(state => state.isConnected)
 	return(
 		<div>
 			<div>

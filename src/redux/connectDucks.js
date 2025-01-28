@@ -2,11 +2,11 @@
 import OBSWebSocket from "obs-websocket-js";
 const obs = new OBSWebSocket();
 
-import { FetchScenes } from './scenesDucks'
-import { FetchScenePreview } from './scenePreviewDucks'
-import { getRecordingStats, RECORDING_STATS_STOP } from './RecordingDucks'
 import { STREAMING_STATS, STREAMING_STOP } from './streamStatusDucks'
-import { displayAlert } from './alertDucks'
+import { alertStore } from './../store/alertStore'
+import { recordingStore } from "../store/recordingStore";
+import { scenePreviewStore } from "../store/scenePreviewStore";
+import { scenesStore } from "../store/scenesStore";
 /* Action types */
 export const OBS_CONNECT = "OBS_CONNECT";
 export const OBS_DISCONNECT = "OBS_DISCONNECT";
@@ -44,17 +44,20 @@ export default function ObsReducer(
 
 /* Action Creators */
 export const Connect = (address) => async (dispatch) => {
+	const displayAlert = alertStore(store => store.displayAlert) 
+	const getRecordingStatus = recordingStore(store => store.getRecordingStatus)
+	const fetchScenePreview = scenePreviewStore(store => store.fetchScenePreview)
+	const fetchScenes = scenesStore(store => store.fetchScenes)
 	try {
 		let result = await obs.connect(address=`ws://${address||'192.168.0.15'}:4444`)
 		if (result) {
 			dispatch({type: OBS_CONNECT})		
-
-			dispatch(FetchScenes(obs))
-			dispatch(FetchScenePreview(obs))
+			fetchScenes(obs)
+			fetchScenePreview(obs)
 			
 			obs.call('GetRecordStatus').then( res => {
 				if(res.outputActive && !isRecording) {
-					isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
+					isRecording = setInterval(() => getRecordingStatus(obs), 1000)
 				}
 			})			
 			obs.on('StreamStatus', res => {
@@ -71,18 +74,18 @@ export const Connect = (address) => async (dispatch) => {
 			})
 			
 			obs.on('ConnectionClosed', () => {
-				dispatch(displayAlert({title: 'Disconnected', description: 'The connection has been closed', icon:'warning'}))
+				displayAlert({title: 'Disconnected', description: 'The connection has been closed', icon:'warning'})
 				dispatch({type: OBS_DISCONNECT})
 			})
 			
 			obs.on('error', (e) => {
-				dispatch(displayAlert({title:e.error, description:e.description, icon:'error'}))
+				displayAlert({title:e.error, description:e.description, icon:'error'})
 			})
 		}
 	}
 	catch (e) {
 			console.log(e)
-			dispatch(displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'}))
+			displayAlert({title:e.error, description:JSON.stringify(e), icon:'error'})
 			dispatch({
 				type: OBS_ERROR,
 				payload: e
@@ -103,7 +106,7 @@ export const Disconnect = () => async (dispatch) => {
 	}
 }
 
-export const setCurrentScene = (name) => async(dispatch) => {
+export const setCurrentScene = async (name) => {
 	try {
 		await obs.call('SetCurrentProgramScene', {'sceneName': name})
 			.then(e => console.log(e))
@@ -113,22 +116,25 @@ export const setCurrentScene = (name) => async(dispatch) => {
 }
 
 export const startStopRecording = () => async (dispatch) => {
+	const displayAlert = alertStore(store => store.displayAlert)
+	const getRecordingStatus = recordingStore(store => store.getRecordingStatus)
+	const recordingStop = recordingStore(store => store.recordingStop)
 	try{
 		let recordingStatus = await obs.call('ToggleRecord')
 		if (recordingStatus.outputActive) {
-			isRecording = setInterval(() => dispatch(getRecordingStats(obs)), 1000)
-			dispatch(displayAlert({title: "Recording", description: "Recording has started", icon: "success"}))
+			isRecording = setInterval(() => getRecordingStatus(obs), 1000)
+			displayAlert({title: "Recording", description: "Recording has started", icon: "success"})
 		} else if (!recordingStatus.outputActive && isRecording) {
 			clearInterval(isRecording)
-			dispatch({type: RECORDING_STATS_STOP})
-			dispatch(displayAlert({title: "Recording", description: "Recording has stoped", icon: "info"}))
+			recordingStop()
+			displayAlert({title: "Recording", description: "Recording has stoped", icon: "info"})
 		}
 	} catch (e) {
 		console.log('catched on startStopRecording function '+e)
 	}
 }
 
-export const startStopStreaming = () => async (dispatch) => {
+export const startStopStreaming = async () => {
 	try {
 		await obs.call('ToggleStream')
 	} catch (e) {

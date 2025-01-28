@@ -1,25 +1,24 @@
-import {useSelector,useDispatch} from 'react-redux'
-import { startStopRecording } from '../redux/connectDucks'
+import { recordingStore } from '../store/recordingStore'
+import ObsInstance from '../utils/obsHandler'
 import { Button } from 'react-rainbow-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDotCircle, faCircle, faStopCircle } from '@fortawesome/free-solid-svg-icons'
 
 export const RecordingComponent = () => {
-	const stats = useSelector(store =>  store.recordingReducer)
-	const dispatch = useDispatch()
-
-	if (stats.data && stats.data.outputActive) {
+	const data = recordingStore(store =>  store.data)
+	const obs = ObsInstance
+	if (data && data.outputActive) {
 		return(	
 			<div className='d-flex flex-column flex-grow-1 align-items-center justify-content-center'>
 				<p className='breathingAnimation' style={{fontSize: "1.5em"}}><FontAwesomeIcon icon={faCircle} className='margin-r-05' style={{color: 'red'}}/><strong>Recording</strong></p><br />
 				<ul>
-					<li><strong>Time: </strong>{stats.data.outputTimecode.split(".")[0]}</li>
-					<li><strong>Video info: </strong> {stats.data.outputWidth}x{stats.data.outputHeight}, {stats.data.path.split(".").slice(-1)}</li>
-					<li><strong>Output name: </strong>{stats.data.path.split("/").slice(-1)[0].split(".")[0]}</li>
-					<li><strong>Output path: </strong>{stats.data.path.slice(0, stats.data.path.lastIndexOf("/")+1)}</li>
-					<li><strong>Output size: </strong> {(stats.data.outputBytes*0.000001).toFixed(2)}MB</li>
+					<li><strong>Time: </strong>{data.outputTimecode.split(".")[0]}</li>
+					<li><strong>Video info: </strong> {data.outputWidth}x{data.outputHeight}, {data.path.split(".").slice(-1)}</li>
+					<li><strong>Output name: </strong>{data.path.split("/").slice(-1)[0].split(".")[0]}</li>
+					<li><strong>Output path: </strong>{data.path.slice(0, data.path.lastIndexOf("/")+1)}</li>
+					<li><strong>Output size: </strong> {(data.outputBytes*0.000001).toFixed(2)}MB</li>
 				</ul><br /><br />
-				<Button variant='destructive' onClick={() => dispatch(startStopRecording())}> 
+				<Button variant='destructive' onClick={() => obs.startStopRecording()}> 
 					<FontAwesomeIcon icon={faStopCircle} className='margin-r-1'/>
 					Stop recording
 				</Button>

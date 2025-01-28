@@ -1,23 +1,21 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { Modal, Application, Card, Button, ButtonIcon, Input, Avatar } from 'react-rainbow-components'
 import { Alerts } from '../components/Notification'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlug, faCog } from '@fortawesome/free-solid-svg-icons'
-import { Connect } from "../redux/connectDucks";
+import ObsHandler from "../utils/obsHandler";
 import { SettingsComponent } from '../components/SettingsComponent'
+import { themeStore } from "../store/themeStore";
 
 export const LoginView = () => {
 	const [address, setAddress] = useState('');
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const dispatch = useDispatch();
-	const theme = useSelector(store => store.themeReducer)
-	const handleConnection = () => {
-		dispatch(Connect(address))
-	}
+	const obs = ObsHandler
+	const theme = themeStore(store => store.theme)
+	const handleConnection = () => obs.connect(address)
 
 	return (
-		<Application theme={theme.theme}>
+		<Application theme={theme}>
 			<Modal 
 				isOpen={isModalOpen}
 				onRequestClose={() => setIsModalOpen(!isModalOpen)}
